@@ -1,21 +1,21 @@
 <openerp>
     <data>
-        <!--<record model="openacademy.course" id="course1">-->
-            <!--<field name="name">Demo Odoo Course</field>-->
-            <!--<field name="responsible_id" ref="base.user_root"/>-->
-        <!--</record>-->
-        <!--<record model="openacademy.course" id="course2">-->
-            <!--<field name="name">Demo Git Course</field>-->
-            <!--<field name="responsible_id" ref="base.user_demo"/>-->
-        <!--</record>-->
-        <!--<record model="openacademy.course" id="course3">-->
-            <!--<field name="name">Demo Python Course</field>-->
-            <!--<field name="responsible_id" ref="base.user_demo"/>-->
-        <!--</record>-->
+        <record model="openacademy.course" id="course1">
+            <field name="name">Demo Odoo Course</field>
+            <field name="responsible_id" ref="base.user_root"/>
+        </record>
+        <record model="openacademy.course" id="course2">
+            <field name="name">Demo Git Course</field>
+            <field name="responsible_id" ref="base.user_demo"/>
+        </record>
+        <record model="openacademy.course" id="course3">
+            <field name="name">Demo Python Course</field>
+            <field name="responsible_id" ref="base.user_demo"/>
+        </record>
 
-        <!--<record model="openacademy.session" id="session1">-->
-            <!--<field name="name">Demo Odoo Session at KMEE</field>-->
-            <!--<field name="course_id" ref="course1"/>-->
-        <!--</record>-->
+        <record model="openacademy.session" id="session1">
+            <field name="name">Demo Odoo Session at KMEE</field>
+            <field name="course_id" ref="course1"/>
+        </record>
     </data>
 </openerp>

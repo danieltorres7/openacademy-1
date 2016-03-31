@@ -161,7 +161,7 @@
                                             </li>
                                         </ul>
                                     </div>
-                                    <div class="oe_clear"></div>
+                                    <div class="oe_clear"/>
                                 </div>
                                 <div t-attf-class="oe_kanban_content">
                                     Session: <field name="name"/>
@@ -192,7 +192,7 @@ model.search([('id', 'in', context['active_ids'])]).action_draft()
             <field name="wkf_id" ref="workflow_session"/>
             <field name="flow_start" eval="True"/>
             <field name="kind">dummy</field>
-            <field name="action"></field>
+            <field name="action"/>
             <field name="action_id" ref="set_session_to_draft"/>
         </record>
 
@@ -207,7 +207,7 @@ model.search([('id', 'in', context['active_ids'])]).action_confirm()
             <field name="name">Confirmed</field>
             <field name="wkf_id" ref="workflow_session"/>
             <field name="kind">dummy</field>
-            <field name="action"></field>
+            <field name="action"/>
             <field name="action_id" ref="set_session_to_confirmed"/>
         </record>
 
@@ -222,7 +222,7 @@ model.search([('id', 'in', context['active_ids'])]).action_done()
             <field name="name">Done</field>
             <field name="wkf_id" ref="workflow_session"/>
             <field name="kind">dummy</field>
-            <field name="action"></field>
+            <field name="action"/>
             <field name="action_id" ref="set_session_to_done"/>
         </record>
 
@@ -263,6 +263,9 @@ model.search([('id', 'in', context['active_ids'])]).action_done()
                         <group>
                             <field name="is_instructor"/>
                         </group>
+                        <group>
+                            <field nolabel="1" name="session_ids"/>
+                        </group>
                     </page>
                 </notebook>
             </field>
@@ -296,7 +299,7 @@ model.search([('id', 'in', context['active_ids'])]).action_done()
             <field name="name">Sessions</field>
             <field name="res_model">openacademy.session</field>
             <field name="view_type">form</field>
-            <field name="view_mode">kanban,tree,form,calendar,gantt,graph</field>
+            <field name="view_mode">tree,form,calendar,gantt,graph,kanban</field>
             <field name="help" type="html">
                 <p class="oe_view_nocontent_create">Create the first session
                 </p>
@@ -328,13 +331,8 @@ model.search([('id', 'in', context['active_ids'])]).action_done()
 
         <record model="ir.module.category" id="module_category_openacademy">
             <field name="name">Open Academy</field>
-            <field name="sequence">202</field>
+            <field name="sequence">201</field>
         </record>
-        <record model="res.groups" id="base.group_user">
-            <field name="category_id" ref="module_category_openacademy"/>
-        </record>
-
-        <record model="res.groups" id="base.group_user"/>
         <record id="group_openacademy_sessionread" model="res.groups">
             <field name="name">OpenAcademy / Session Read</field>
             <field name="category_id" ref="module_category_openacademy"/>
@@ -346,6 +344,53 @@ model.search([('id', 'in', context['active_ids'])]).action_done()
             <field name="implied_ids" eval="[(4, ref('group_openacademy_sessionread'))]"/>
             <field name="users" eval="[(4, ref('base.user_root'))]"/>
         </record>
+
+        <record id="only_responsible_can_modify" model="ir.rule">
+            <field name="name">course.modify.rule</field>
+            <field name="model_id" ref="model_openacademy_course"/>
+            <field name="groups" eval="[(4, ref('group_openacademy_manager'))]"/>
+            <field name="perm_read" eval="0"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="0"/>
+            <field name="perm_unlink" eval="1"/>
+            <field name="domain_force">
+                ['|', ('responsible_id','=',False),
+                      ('responsible_id','=',user.id)]
+            </field>
+        </record>
+
+
+
+        <record model="ir.ui.view" id="wizard_form_view">
+            <field name="name">wizard.form</field>
+            <field name="model">openacademy.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Add Attendees">
+                    <group>
+                        <field name="session_id"/>
+                        <field name="attendee_ids"/>
+                    </group>
+                    <footer>
+                        <button name="subscribe" type="object"
+                                string="Subscribe" class="oe_highlight"/>
+                        or
+                        <button special="cancel" string="Cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <act_window id="launch_session_wizard"
+                    name="Add Attendees"
+                    src_model="openacademy.session"
+                    res_model="openacademy.wizard"
+                    view_mode="form"
+                    target="new"
+                    key2="client_action_multi"/>
+
+        <menuitem id="wizard_menu" name="Session Wizard"
+                  parent="openacademy_menu"
+                  action="launch_session_wizard"/>
 
     </data>
 </openerp>

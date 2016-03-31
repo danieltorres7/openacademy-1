@@ -126,7 +126,6 @@ class Session(models.Model):
                 },
             }
 
-
 class Attendee(models.Model):
     _name = 'openacademy.attendee'
 
@@ -141,3 +140,21 @@ class Partner(models.Model):
     _inherit = 'res.partner'
 
     is_instructor = fields.Boolean("Instructor", default=False)
+    session_ids = fields.One2many(
+        'openacademy.session', 'instructor_id', string="Sessions")
+
+class Wizard(models.TransientModel):
+    _name = 'openacademy.wizard'
+
+    def _default_session(self):
+        return self.env['openacademy.session'].browse(self._context.get('active_id'))
+
+    session_id = fields.Many2one('openacademy.session',
+        string="Session", required=True, default=_default_session)
+    attendee_ids = fields.One2many(
+        'openacademy.attendee', 'session_id', string="Attendees")
+
+    @api.multi
+    def subscribe(self):
+        self.session_id.attendee_ids |= self.attendee_ids
+        return {}
