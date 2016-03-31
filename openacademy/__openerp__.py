@@ -20,5 +20,5 @@
     ],
     "demo": [
         "demo/openacademy_demo.xml",
-    ],
+    ]
 }
