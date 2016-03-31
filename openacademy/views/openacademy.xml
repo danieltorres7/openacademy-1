@@ -296,7 +296,7 @@ model.search([('id', 'in', context['active_ids'])]).action_done()
             <field name="name">Sessions</field>
             <field name="res_model">openacademy.session</field>
             <field name="view_type">form</field>
-            <field name="view_mode">tree,form,calendar,gantt,graph,kanban</field>
+            <field name="view_mode">kanban,tree,form,calendar,gantt,graph</field>
             <field name="help" type="html">
                 <p class="oe_view_nocontent_create">Create the first session
                 </p>
@@ -325,5 +325,27 @@ model.search([('id', 'in', context['active_ids'])]).action_done()
         <menuitem id="partner_tag_menu" name="Partner Tags"
                   parent="openacademy_menu"
                   action="partner_tag_list_action"/>
+
+        <record model="ir.module.category" id="module_category_openacademy">
+            <field name="name">Open Academy</field>
+            <field name="sequence">202</field>
+        </record>
+        <record model="res.groups" id="base.group_user">
+            <field name="category_id" ref="module_category_openacademy"/>
+        </record>
+
+        <record model="res.groups" id="base.group_user"/>
+        <record id="group_openacademy_sessionread" model="res.groups">
+            <field name="name">OpenAcademy / Session Read</field>
+            <field name="category_id" ref="module_category_openacademy"/>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+        <record id="group_openacademy_manager" model="res.groups">
+            <field name="name">OpenAcademy / Manager</field>
+            <field name="category_id" ref="module_category_openacademy"/>
+            <field name="implied_ids" eval="[(4, ref('group_openacademy_sessionread'))]"/>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        </record>
+
     </data>
 </openerp>
