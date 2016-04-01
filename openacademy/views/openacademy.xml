@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+
+    <menuitem id="openacademy_course_menu"
+              name="Open Academy" sequence="10"/>
+
+    <menuitem id="openacademy_course_sub_menu"
+              name="Open Academy" sequence="10"
+              parent="openacademy_course_menu"/>
+
+    <record model="ir.actions.act_window" id="openacademy_course_action">
+        <field name="name">Course</field>
+        <field name="res_model">openacademy.course</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to define a curso.
+              </p><p>
+                You must define a product for everything you sell, whether it's
+                a physical product, a consumable or a service you offer to
+                customers.
+              </p><p>
+                The product form contains information to simplify the sale
+                process: price, notes in the quotation, accounting data,
+                procurement methods, etc.
+              </p>
+            </field>
+    </record>
+        
+    <menuitem id="openacademy_course_item"
+              name="Curso" sequence="10"
+              parent="openacademy_course_sub_menu"
+              action="openacademy_course_action"/>
+
+    <record model="ir.ui.view" id="openacademy_course_view_form">
+        <field name="name">view.name</field>
+        <field name="model">openacademy.course</field>
+        <field name="type">form</field>  <!-- tree,form,calendar,search,graph,gantt -->
+        <field name="priority" eval="1"/>
+        <field name="arch" type="xml">
+            <form>
+                <div class="oe_title">
+                    <label for="name"
+                           class="oe_edit_only"
+                           string="Course name" />
+                    <h1><field name="name"/></h1>
+                </div>
+                <separator string="Geral" colspan="2" />
+                <notebook>
+                    <page string="Detalhes">
+                        <group colspan="2" col="2">
+                            <field nolabel="1" name="description" placeholder="Course description..." />
+                        </group>
+                    </page>
+                    <page string="Outras informaçoes">
+                    </page>
+                    <page string="Sessions">
+                        <field name="session_ids">
+                            <tree>
+                                <field name="name"/>
+                            </tree>
+                        </field>
+                    </page>
+                </notebook>
+        </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="openacademy_course_view_tree">
+        <field name="name">view.name</field>
+        <field name="model">openacademy.course</field>
+        <field name="type">tree</field>  <!-- tree,form,calendar,search,graph,gantt -->
+        <field name="priority" eval="1"/>
+        <field name="arch" type="xml">
+            <tree string="Meus Cursos">
+                <field name="name"/>
+                <field name="description"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="openacademy_attendee_action">
+        <field name="name">Attendee</field>
+        <field name="res_model">openacademy.attendee</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="openacademy_attendee_item"
+              name="Attendee" sequence="10"
+              parent="openacademy_course_sub_menu"
+              action="openacademy_attendee_action"/>
+
+    <record model="ir.ui.view" id="openacademy_attendee_view_form">
+        <field name="name">view.name</field>
+        <field name="model">openacademy.attendee</field>
+        <field name="type">form</field>  <!-- tree,form,calendar,search,graph,gantt -->
+        <field name="priority" eval="1"/>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                        <div class="oe_title">
+                        <label for="name"
+                               class="oe_edit_only"
+                               string="Attendee name" />
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <field name="session_id"/>
+                        <field name="partner_id"/>
+                    </group>
+                </sheet>
+        </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="openacademy_attendee_view_tree">
+        <field name="name">view.name</field>
+        <field name="model">openacademy.attendee</field>
+        <field name="type">tree</field>  <!-- tree,form,calendar,search,graph,gantt -->
+        <field name="priority" eval="1"/>
+        <field name="arch" type="xml">
+            <tree string="Attendee">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="openacademy_session_action">
+        <field name="name">Session</field>
+        <field name="res_model">openacademy.session</field>
+        <field name="view_mode">tree,form,calendar,graph</field>
+    </record>
+
+    <menuitem id="openacademy_session_item"
+              name="Session" sequence="10"
+              parent="openacademy_course_sub_menu"
+              action="openacademy_session_action"/>
+
+    <record model="ir.ui.view" id="openacademy_session_view_form">
+        <field name="name">view.name</field>
+        <field name="model">openacademy.session</field>
+        <field name="type">form</field>  <!-- tree,form,calendar,search,graph,gantt -->
+        <field name="priority" eval="1"/>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <group>
+                        <field name="name"/>
+                        <field name="start_date"/>
+                        <field name="duration"/>
+                        <field name="seats"/>
+                    </group>
+                    <group>
+                        <field name="stop_date"/>
+                        <field name="teacher_category"/>
+                        <field name="teacher_domain" />
+                        <field name="instructor_id"/>
+                        <field name="taken_seats" widget="percentpie"/>
+                    </group>
+                </group>
+                <field name="attendee_ids" widget="many2many"/>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="openacademy_session_view_tree">
+        <field name="name">view.name</field>
+        <field name="model">openacademy.session</field>
+        <field name="type">tree</field>  <!-- tree,form,calendar,search,graph,gantt -->
+        <field name="priority" eval="1"/>
+        <field name="arch" type="xml">
+            <tree string="Meus Cursos">
+                  <!--colors="blue:name==''"-->
+                <field name="name"/>
+                <field name="start_date"/>
+                <field name="stop_date"/>
+                <field name="duration"/>
+                <field name="seats"/>
+                <field name="taken_seats" widget="progressbar"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="openacademy_session_view_calendar">
+        <field name="name">view.name</field>
+        <field name="model">openacademy.session</field>
+        <field name="type">calendar</field>  <!-- tree,form,calendar,search,graph,gantt -->
+        <field name="priority" eval="1"/>
+        <field name="arch" type="xml">
+            <calendar string="Meus Cursos" date_start="start_date">
+                <field name="name"/>
+            </calendar>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="openacademy_session_view_graph">
+        <field name="name">openacademy.session.graph</field>
+        <field name="model">openacademy.session</field>
+        <field name="type">graph</field>
+        <field name="priority" eval="1"/>
+        <field name="arch" type="xml">
+            <calendar string="Meus Cursos" type="bar">
+                <field name="seats" type="row"/>
+                <field name="taken_seats" type="row"/>
+                <field name="teacher_category" type="measure"/>
+            </calendar>
+        </field>
+    </record>
+    </data>
+</openerp>
